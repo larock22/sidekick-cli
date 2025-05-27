@@ -42,7 +42,7 @@ class ConfigSetup(BaseSetup):
         loaded_config = user_configuration.load_config()
 
         if loaded_config and not force_setup:
-            await ui.muted(f"Loading config from: {self.config_file}")
+            # Silent loading
             # Merge loaded config with defaults to ensure all required keys exist
             self.state_manager.session.user_config = self._merge_with_defaults(loaded_config)
         else:

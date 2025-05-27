@@ -45,8 +45,7 @@ class EnvironmentSetup(BaseSetup):
                 os.environ[key] = value
                 env_set_count += 1
 
-        if env_set_count > 0:
-            await ui.muted(f"Set {env_set_count} environment variable(s)")
+        # Silent env setup
 
     async def validate(self) -> bool:
         """Validate that environment variables were set correctly."""

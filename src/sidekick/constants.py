@@ -75,6 +75,7 @@ UI_COLORS = {
     "warning": "orange1",
     "error": "red",
     "muted": "grey62",
+    "file_ref": "#00aaff",
 }
 
 # UI text and formatting

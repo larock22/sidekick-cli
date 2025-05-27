@@ -3,11 +3,15 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from prompt_toolkit.completion import Completer
 from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.shortcuts import PromptSession
+from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator
 
+from sidekick.constants import UI_COLORS
 from sidekick.core.state import StateManager
 from sidekick.exceptions import UserAbortError
 
@@ -21,6 +25,8 @@ class PromptConfig:
     validator: Optional[Validator] = None
     key_bindings: Optional[KeyBindings] = None
     placeholder: Optional[FormattedText] = None
+    completer: Optional[Completer] = None
+    lexer: Optional[Lexer] = None
     timeoutlen: float = 0.05
 
 
@@ -35,6 +41,13 @@ class PromptManager:
         """
         self.state_manager = state_manager
         self._temp_sessions = {}  # For when no state manager is available
+        self._style = self._create_style()
+    
+    def _create_style(self) -> Style:
+        """Create the style for the prompt with file reference highlighting."""
+        return Style.from_dict({
+            'file-reference': UI_COLORS.get('file_ref', 'light_blue'),
+        })
 
     def get_session(self, session_key: str, config: PromptConfig) -> PromptSession:
         """Get or create a prompt session.
@@ -52,6 +65,9 @@ class PromptManager:
                 self.state_manager.session.input_sessions[session_key] = PromptSession(
                     key_bindings=config.key_bindings,
                     placeholder=config.placeholder,
+                    completer=config.completer,
+                    lexer=config.lexer,
+                    style=self._style,
                 )
             return self.state_manager.session.input_sessions[session_key]
         else:
@@ -60,6 +76,9 @@ class PromptManager:
                 self._temp_sessions[session_key] = PromptSession(
                     key_bindings=config.key_bindings,
                     placeholder=config.placeholder,
+                    completer=config.completer,
+                    lexer=config.lexer,
+                    style=self._style,
                 )
             return self._temp_sessions[session_key]
 

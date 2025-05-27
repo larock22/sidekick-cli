@@ -206,16 +206,20 @@ async def process_request(text: str, state_manager: StateManager, output: bool =
 async def repl(state_manager: StateManager):
     action = None
 
-    await ui.info(f"Using model {state_manager.session.current_model}")
-    instance = agent.get_or_create_agent(state_manager.session.current_model, state_manager)
-
-    await ui.info("Attaching MCP servers")
+    # Hacky startup message
+    await ui.warning("⚠️  tinyAgent v0.1 - BETA SOFTWARE")
+    await ui.muted("→ All changes will be made on a new branch for safety")
+    await ui.muted("→ Use with caution! This tool can modify your codebase")
     await ui.line()
+    await ui.success(f"[{state_manager.session.current_model}] ready to hack...")
+    await ui.line()
+    
+    instance = agent.get_or_create_agent(state_manager.session.current_model, state_manager)
 
     async with instance.run_mcp_servers():
         while True:
             try:
-                line = await ui.multiline_input()
+                line = await ui.multiline_input(state_manager)
             except (EOFError, KeyboardInterrupt):
                 break
 

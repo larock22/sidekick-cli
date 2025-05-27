@@ -17,12 +17,12 @@ console = Console()
 colors = DotDict(UI_COLORS)
 
 BANNER = """\
-███████╗██╗██████╗ ███████╗██╗  ██╗██╗ ██████╗██╗  ██╗
-██╔════╝██║██╔══██╗██╔════╝██║ ██╔╝██║██╔════╝██║ ██╔╝
-███████╗██║██║  ██║█████╗  █████╔╝ ██║██║     █████╔╝
-╚════██║██║██║  ██║██╔══╝  ██╔═██╗ ██║██║     ██╔═██╗
-███████║██║██████╔╝███████╗██║  ██╗██║╚██████╗██║  ██╗
-╚══════╝╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝"""
+████████╗██╗███╗   ██╗██╗   ██╗ █████╗  ██████╗ ███████╗███╗   ██╗████████╗
+╚══██╔══╝██║████╗  ██║╚██╗ ██╔╝██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝
+   ██║   ██║██╔██╗ ██║ ╚████╔╝ ███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║   
+   ██║   ██║██║╚██╗██║  ╚██╔╝  ██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║   
+   ██║   ██║██║ ╚████║   ██║   ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   
+   ╚═╝   ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝"""
 
 
 @create_sync_wrapper
@@ -71,10 +71,8 @@ async def banner() -> None:
     """Display the application banner."""
     console.clear()
     banner_padding = Padding(BANNER, (1, 0, 0, 2))
-    app_settings = ApplicationSettings()
-    version_padding = Padding(f"v{app_settings.version}", (0, 0, 1, 2))
-    await print(banner_padding, style=colors.primary)
-    await print(version_padding, style=colors.muted)
+    # Hacky green banner, no version display
+    await print(banner_padding, style="bright_green")
 
 
 async def clear() -> None:

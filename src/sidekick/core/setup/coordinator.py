@@ -27,14 +27,15 @@ class SetupCoordinator:
         for step in self.setup_steps:
             try:
                 if await step.should_run(force_setup):
-                    await ui.info(f"Running setup: {step.name}")
+                    # Silent setup - no messages
                     await step.execute(force_setup)
 
                     if not await step.validate():
                         await ui.error(f"Setup validation failed: {step.name}")
                         raise RuntimeError(f"Setup step '{step.name}' failed validation")
                 else:
-                    await ui.muted(f"Skipping setup: {step.name}")
+                    # Skip silently
+                    pass
             except Exception as e:
                 await ui.error(f"Setup failed at step '{step.name}': {str(e)}")
                 raise

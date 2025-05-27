@@ -4,12 +4,15 @@ from typing import Optional
 
 from prompt_toolkit.formatted_text import HTML
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator
 
-from sidekick.constants import UI_PROMPT_PREFIX
+from sidekick.constants import UI_COLORS, UI_PROMPT_PREFIX
 from sidekick.core.state import StateManager
 
+from .completers import FileReferenceCompleter
 from .keybindings import create_key_bindings
+from .lexers import FileReferenceLexer
 from .prompt_manager import PromptConfig, PromptManager
 
 
@@ -26,6 +29,8 @@ async def input(
     multiline: bool = False,
     key_bindings: Optional[KeyBindings] = None,
     placeholder: Optional[HTML] = None,
+    completer=None,
+    lexer=None,
     timeoutlen: float = 0.05,
     state_manager: Optional[StateManager] = None,
 ) -> str:
@@ -40,6 +45,8 @@ async def input(
         multiline: Whether to allow multiline input
         key_bindings: Optional custom key bindings
         placeholder: Optional placeholder text
+        completer: Optional completer for tab completion
+        lexer: Optional lexer for syntax highlighting
         timeoutlen: Timeout length for input
         state_manager: The state manager for session storage
 
@@ -53,6 +60,8 @@ async def input(
         validator=validator,
         key_bindings=key_bindings,
         placeholder=placeholder,
+        completer=completer,
+        lexer=lexer,
         timeoutlen=timeoutlen,
     )
 
@@ -63,8 +72,8 @@ async def input(
     return await manager.get_input(session_key, pretext, config)
 
 
-async def multiline_input() -> str:
-    """Get multiline input from the user."""
+async def multiline_input(state_manager: Optional[StateManager] = None) -> str:
+    """Get multiline input from the user with @file completion and highlighting."""
     kb = create_key_bindings()
     placeholder = formatted_text(
         (
@@ -75,4 +84,12 @@ async def multiline_input() -> str:
             "</darkgrey>"
         )
     )
-    return await input("multiline", key_bindings=kb, multiline=True, placeholder=placeholder)
+    return await input(
+        "multiline", 
+        key_bindings=kb, 
+        multiline=True, 
+        placeholder=placeholder,
+        completer=FileReferenceCompleter(),
+        lexer=FileReferenceLexer(),
+        state_manager=state_manager
+    )
