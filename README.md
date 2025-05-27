@@ -1,19 +1,19 @@
-# TinyAgent (Beta)
+# TunaCode (Beta)
 
-[![PyPI version](https://badge.fury.io/py/tinyagent-cli.svg)](https://badge.fury.io/py/tinyagent-cli)
+[![PyPI version](https://badge.fury.io/py/tunacode-cli.svg)](https://badge.fury.io/py/tunacode-cli)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-![TinyAgent Demo](screenshot.gif)
+![TunaCode Demo](screenshot.gif)
 
 Your agentic CLI developer.
 
 ## Overview
 
-TinyAgent is an agentic CLI-based AI tool inspired by Claude Code, Copilot, Windsurf and Cursor. It's meant
+TunaCode is an agentic CLI-based AI tool inspired by Claude Code, Copilot, Windsurf and Cursor. It's meant
 to be an open source alternative to these tools, providing a similar experience but with the flexibility of
 using different LLM providers (Anthropic, OpenAI, Google Gemini, OpenRouter) while keeping the agentic workflow.
 
-*TinyAgent is currently in beta and under active development. Please [report issues](https://github.com/geekforbrains/tinyagent-cli/issues) or share feedback!*
+*TunaCode is currently in beta and under active development. Please [report issues](https://github.com/geekforbrains/tunacode-cli/issues) or share feedback!*
 
 ## Features
 
@@ -21,8 +21,8 @@ using different LLM providers (Anthropic, OpenAI, Google Gemini, OpenRouter) whi
 - MCP support
 - Use /undo when AI breaks things.
 - Easily switch between models in the same session.
-- JIT-style system prompt injection ensures TinyAgent doesn't lose the plot.
-- Per-project guide. Adjust TinyAgent's behavior to suit your needs.
+- JIT-style system prompt injection ensures TunaCode doesn't lose the plot.
+- Per-project guide. Adjust TunaCode's behavior to suit your needs.
 - CLI-first design. Ditch the clunky IDE.
 - Cost and token tracking.
 - Per command or per session confirmation skipping.
@@ -34,27 +34,27 @@ using different LLM providers (Anthropic, OpenAI, Google Gemini, OpenRouter) whi
 
 ## Quick Start
 
-Install TinyAgent.
+Install TunaCode.
 
 ```
-pip install tinyagent-cli
+pip install tunacode-cli
 ```
 
 On first run, you'll be asked to configure your LLM providers.
 
 ```
-tinyagent
+tunacode
 ```
 
 ## Configuration
 
-After initial setup, TinyAgent saves a config file to `~/.config/tinyagent.json`. You can open and
-edit this file as needed. Future updates will make editing easier directly from within TinyAgent.
+After initial setup, TunaCode saves a config file to `~/.config/tunacode.json`. You can open and
+edit this file as needed. Future updates will make editing easier directly from within TunaCode.
 
 ### OpenRouter Support
 
 To use [OpenRouter](https://openrouter.ai) models, add an `OPENROUTER_API_KEY` to the
-`env` section of your configuration file. TinyAgent will set the environment variable so the
+`env` section of your configuration file. TunaCode will set the environment variable so the
 OpenAI client can communicate with OpenRouter:
 
 ```json
@@ -65,10 +65,10 @@ OpenAI client can communicate with OpenRouter:
 }
 ```
 
-Then run TinyAgent with the OpenRouter base URL:
+Then run TunaCode with the OpenRouter base URL:
 
 ```bash
-OPENAI_BASE_URL="https://openrouter.ai/api/v1" tinyagent
+OPENAI_BASE_URL="https://openrouter.ai/api/v1" tunacode
 ```
 
 You can now switch to OpenRouter models using:
@@ -78,7 +78,7 @@ You can now switch to OpenRouter models using:
 
 ### MCP Support
 
-TinyAgent supports Model Context Protocol (MCP) servers. You can configure MCP servers in your `~/.config/tinyagent.json` file:
+TunaCode supports Model Context Protocol (MCP) servers. You can configure MCP servers in your `~/.config/tunacode.json` file:
 
 ```json
 {
@@ -115,18 +115,9 @@ MCP servers extend the capabilities of your AI assistant, allowing it to interac
 
 ## Customization
 
-TinyAgent supports the use of a "guide". This is a `TINYAGENT.md` file in the project root that contains
-instructions for TinyAgent. Helpful for specifying tech stack, project structure, development
+TunaCode supports the use of a "guide". This is a `TUNACODE.md` file in the project root that contains
+instructions for TunaCode. Helpful for specifying tech stack, project structure, development
 preferences etc.
-
-## Telemetry
-
-TinyAgent uses [Sentry](https://sentry.io/) for error tracking and usage analytics. You can disable this by
-starting with the `--no-telemetry` flag.
-
-```
-tinyagent --no-telemetry
-```
 
 ## Requirements
 
@@ -138,7 +129,7 @@ tinyagent --no-telemetry
 ### Using pip
 
 ```bash
-pip install tinyagent-cli
+pip install tunacode-cli
 ```
 
 ### From Source
@@ -165,11 +156,11 @@ When preparing a new release:
 
 1. Update version numbers in:
    - `pyproject.toml`
-   - `src/tinyagent/constants.py` (APP_VERSION)
+   - `src/tunacode/constants.py` (APP_VERSION)
 
 2. Commit the version changes:
    ```bash
-   git add pyproject.toml src/tinyagent/constants.py
+   git add pyproject.toml src/tunacode/constants.py
    git commit -m "chore: bump version to X.Y.Z"
    ```
 
@@ -203,9 +194,9 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 
 ## Links
 
-- [PyPI Package](https://pypi.org/project/tinyagent-cli/)
-- [GitHub Issues](https://github.com/geekforbrains/tinyagent-cli/issues)
-- [GitHub Repository](https://github.com/geekforbrains/tinyagent-cli)
+- [PyPI Package](https://pypi.org/project/tunacode-cli/)
+- [GitHub Issues](https://github.com/geekforbrains/tunacode-cli/issues)
+- [GitHub Repository](https://github.com/geekforbrains/tunacode-cli)
 
 ## License
 
@@ -213,4 +204,4 @@ MIT
 
 ## Acknowledgments
 
-This project is a fork of [sidekick-cli](https://github.com/geekforbrains/sidekick-cli). Thank you to the sidekick-cli team for creating the foundation that made TinyAgent possible! 🙏
+This project is a fork of [sidekick-cli](https://github.com/geekforbrains/sidekick-cli). Thank you to the sidekick-cli team for creating the foundation that made TunaCode possible! 🙏

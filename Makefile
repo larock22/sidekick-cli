@@ -4,7 +4,7 @@ install:
 	pip install -e ".[dev]"
 
 run:
-	env/bin/tinyagent
+	env/bin/tunacode
 
 clean:
 	rm -rf build/
@@ -22,7 +22,7 @@ test:
 	pytest
 
 coverage:
-	pytest --cov=src/tinyagent --cov-report=term
+	pytest --cov=src/tunacode --cov-report=term
 
 build:
 	python -m build
