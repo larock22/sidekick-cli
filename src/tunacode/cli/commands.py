@@ -254,6 +254,33 @@ class UndoCommand(SimpleCommand):
             await ui.warning(message)
 
 
+class StopCommand(SimpleCommand):
+    """Stop/cancel the currently running command."""
+
+    def __init__(self):
+        super().__init__(
+            CommandSpec(
+                name="stop",
+                aliases=["/stop", "/cancel"],
+                description="Stop the currently running command",
+                category=CommandCategory.SYSTEM,
+            )
+        )
+
+    async def execute(self, args: List[str], context: CommandContext) -> None:
+        from ..utils.process import cancel_current_process
+        
+        # Cancel any running subprocess
+        cancel_current_process()
+        
+        # Cancel agent task if running
+        if context.state_manager.session.current_task and not context.state_manager.session.current_task.done():
+            context.state_manager.session.current_task.cancel()
+            await ui.warning("Command cancelled")
+        else:
+            await ui.info("No command is currently running")
+
+
 class BranchCommand(SimpleCommand):
     """Create and switch to a new git branch."""
 
@@ -498,6 +525,7 @@ class CommandRegistry:
             ClearCommand,
             HelpCommand,
             UndoCommand,
+            StopCommand,
             BranchCommand,
             InitCommand,
             TunaCodeCommand,

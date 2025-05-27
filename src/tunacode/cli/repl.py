@@ -19,7 +19,6 @@ from tunacode.core.tool_handler import ToolHandler
 from tunacode.exceptions import AgentError, UserAbortError, ValidationError
 from tunacode.ui import console as ui
 from tunacode.ui.tool_ui import ToolUI
-from tunacode.utils.signal_handler import double_interrupt_handler
 
 from ..types import CommandContext, CommandResult, StateManager, ToolArgs
 from .commands import CommandRegistry
@@ -207,10 +206,6 @@ async def process_request(text: str, state_manager: StateManager, output: bool =
 async def repl(state_manager: StateManager):
     action = None
 
-    # Set up signal handler for double Ctrl+C
-    double_interrupt_handler.set_state_manager(state_manager)
-    double_interrupt_handler.install()
-
     # Hacky startup message
     await ui.warning("⚠️  tunaCode v0.1 - BETA SOFTWARE")
     await ui.muted("→ All changes will be made on a new branch for safety")
@@ -243,16 +238,13 @@ async def repl(state_manager: StateManager):
 
             # Check if another task is already running
             if state_manager.session.current_task and not state_manager.session.current_task.done():
-                await ui.muted("Agent is busy, press Ctrl+C twice to interrupt.")
+                await ui.muted("Agent is busy, use /stop to interrupt.")
                 continue
 
             state_manager.session.current_task = get_app().create_background_task(
                 process_request(line, state_manager)
             )
 
-    # Clean up signal handler
-    double_interrupt_handler.uninstall()
-    
     if action == "restart":
         await repl(state_manager)
     else:
