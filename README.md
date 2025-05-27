@@ -210,3 +210,7 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 ## License
 
 MIT
+
+## Acknowledgments
+
+This project is a fork of [sidekick-cli](https://github.com/geekforbrains/sidekick-cli). Thank you to the sidekick-cli team for creating the foundation that made TinyAgent possible! 🙏
