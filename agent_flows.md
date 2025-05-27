@@ -1,42 +1,42 @@
-# Sidekick CLI Agent Flows Documentation
+# TinyAgent CLI Agent Flows Documentation
 
 ## Agent Tooling System Overview
 
-The Sidekick CLI provides a robust tooling system for AI agents to interact with the filesystem and execute commands. This document explains the architecture, available tools, and execution flows.
+The TinyAgent CLI provides a robust tooling system for AI agents to interact with the filesystem and execute commands. This document explains the architecture, available tools, and execution flows.
 
 ## Available Tools
 
-The Sidekick CLI provides **4 internal tools** out of the box:
+The TinyAgent CLI provides **4 internal tools** out of the box:
 
 ### 1. Read File Tool (`read_file`)
 - Reads file contents with UTF-8 encoding
 - Has a 100KB file size limit
 - Returns file content or specific error messages for common issues
-- Location: `src/sidekick/tools/read_file.py`
+- Location: `src/tinyagent/tools/read_file.py`
 
 ### 2. Write File Tool (`write_file`)
 - Creates new files only (fails if file exists)
 - Automatically creates parent directories
 - Guides the agent to use `update_file` for existing files via ModelRetry
-- Location: `src/sidekick/tools/write_file.py`
+- Location: `src/tinyagent/tools/write_file.py`
 
 ### 3. Update File Tool (`update_file`)
 - Updates existing files using target/patch semantics
 - Replaces exact text blocks (first occurrence only)
 - Provides helpful context when target text is not found
-- Location: `src/sidekick/tools/update_file.py`
+- Location: `src/tinyagent/tools/update_file.py`
 
 ### 4. Run Command Tool (`run_command`)
 - Executes shell commands via subprocess
 - Captures both stdout and stderr
 - Truncates output if it exceeds 5000 characters (shows beginning and end)
-- Location: `src/sidekick/tools/run_command.py`
+- Location: `src/tinyagent/tools/run_command.py`
 
 ## Tool Implementation Architecture
 
 ### Base Classes
 
-1. **`BaseTool`** (`src/sidekick/tools/base.py:19`)
+1. **`BaseTool`** (`src/tinyagent/tools/base.py:19`)
    - Abstract base class providing:
    - Error handling with structured exceptions
    - UI logging of tool operations
@@ -59,7 +59,7 @@ The Sidekick CLI provides **4 internal tools** out of the box:
 ## Tool Execution Flow
 
 1. **Agent calls tool** via pydantic-ai framework
-2. **Tool callback** (`_tool_handler` in `src/sidekick/cli/repl.py`) is invoked
+2. **Tool callback** (`_tool_handler` in `src/tinyagent/cli/repl.py`) is invoked
 3. **Confirmation check** via `ToolHandler`:
    - Checks if tool requires confirmation (based on YOLO mode and ignored tools)
    - Skips confirmation for previously approved tool types
@@ -79,7 +79,7 @@ The Sidekick CLI provides **4 internal tools** out of the box:
 
 ## UI Display of Tool Usage
 
-The **`ToolUI`** class (`src/sidekick/ui/tool_ui.py`) handles all tool-related UI:
+The **`ToolUI`** class (`src/tinyagent/ui/tool_ui.py`) handles all tool-related UI:
 
 ### Tool Titles
 - Internal tools: `Tool(read_file)`
@@ -123,10 +123,10 @@ When confirmation is skipped, MCP tools still log their arguments
 
 ## Diff Generation System
 
-The sidekick CLI uses **Python's built-in `difflib` library** for diff generation and display.
+The tinyagent CLI uses **Python's built-in `difflib` library** for diff generation and display.
 
 ### Diff Creation Process
-Location: `src/sidekick/utils/diff_utils.py:11`
+Location: `src/tinyagent/utils/diff_utils.py:11`
 
 The `render_file_diff()` function:
 1. Takes `target` (original text) and `patch` (new text) as inputs
@@ -156,7 +156,7 @@ The function processes opcodes from SequenceMatcher:
 ## Error Handling
 
 ### Exception Hierarchy
-- `SidekickError`: Base for all Sidekick exceptions
+- `TinyAgentError`: Base for all TinyAgent exceptions
 - `ToolExecutionError`: Tool-specific failures with context
 - `FileOperationError`: File-related errors with operation and path
 - `UserAbortError`: User cancelled the operation

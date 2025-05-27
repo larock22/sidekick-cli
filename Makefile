@@ -4,7 +4,7 @@ install:
 	pip install -e ".[dev]"
 
 run:
-	env/bin/sidekick
+	env/bin/tinyagent
 
 clean:
 	rm -rf build/
@@ -22,7 +22,7 @@ test:
 	pytest
 
 coverage:
-	pytest --cov=src/sidekick --cov-report=term
+	pytest --cov=src/tinyagent --cov-report=term
 
 build:
 	python -m build

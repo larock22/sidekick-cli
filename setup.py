@@ -5,6 +5,6 @@ setup(
     packages=find_namespace_packages(where="src"),
     include_package_data=True,
     package_data={
-        "sidekick": ["prompts/*.txt"],
+        "tinyagent": ["prompts/*.txt"],
     },
 )
