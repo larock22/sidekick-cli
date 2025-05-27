@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tinyagent-cli"
+name = "tunacode-cli"
 version = "0.5.1"
 description = "Your agentic CLI developer."
 keywords = ["cli", "agent", "development", "automation"]
@@ -34,7 +34,7 @@ dependencies = [
 ]
 
 [project.scripts]
-tinyagent = "tinyagent.cli:app"
+tunacode = "tunacode.cli:app"
 
 [project.optional-dependencies]
 dev = [
@@ -47,8 +47,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/geekforbrains/tinyagent-cli"
-Repository = "https://github.com/geekforbrains/tinyagent-cli"
+Homepage = "https://github.com/geekforbrains/tunacode-cli"
+Repository = "https://github.com/geekforbrains/tunacode-cli"
 
 [tool.black]
 line-length = 100
