@@ -300,6 +300,50 @@ class BranchCommand(SimpleCommand):
             await ui.error("Git executable not found")
 
 
+class InitCommand(SimpleCommand):
+    """Analyse the repository and generate TUNACODE.md."""
+
+    def __init__(self):
+        super().__init__(
+            CommandSpec(
+                name="init",
+                aliases=["/init"],
+                description="Analyse the repo and create TUNACODE.md",
+                category=CommandCategory.DEVELOPMENT,
+            )
+        )
+
+    async def execute(self, args: List[str], context: CommandContext) -> None:
+        import json
+        from pathlib import Path
+
+        from .. import context as ctx
+
+        await ui.info("Gathering repository context")
+        data = await ctx.get_context()
+
+        prompt = (
+            "Using the following repository context, summarise build commands "
+            "and coding conventions. Return markdown for a TUNACODE.md file.\n\n"
+            + json.dumps(data, indent=2)
+        )
+
+        process_request = context.process_request
+        content = ""
+        if process_request:
+            res = await process_request(prompt, context.state_manager, output=False)
+            try:
+                content = res.result.output
+            except Exception:
+                content = ""
+
+        if not content:
+            content = "# TUNACODE\n\n" + json.dumps(data, indent=2)
+
+        Path("TUNACODE.md").write_text(content, encoding="utf-8")
+        await ui.success("TUNACODE.md written")
+
+
 class CompactCommand(SimpleCommand):
     """Compact conversation context."""
 
@@ -455,6 +499,7 @@ class CommandRegistry:
             HelpCommand,
             UndoCommand,
             BranchCommand,
+            InitCommand,
             TunaCodeCommand,
             CompactCommand,
             ModelCommand,
