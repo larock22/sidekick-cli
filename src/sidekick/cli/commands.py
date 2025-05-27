@@ -157,6 +157,64 @@ class ClearCommand(SimpleCommand):
         context.state_manager.session.messages = []
 
 
+class TinyAgentCommand(SimpleCommand):
+    """Use BM25 to inspect the codebase and read relevant files."""
+
+    def __init__(self):
+        super().__init__(
+            CommandSpec(
+                name="tinyAgent",
+                aliases=["/tinyAgent"],
+                description="Scan repo with BM25 and display key files",
+                category=CommandCategory.DEVELOPMENT,
+            )
+        )
+
+    async def execute(self, args: List[str], context: CommandContext) -> None:
+        from pathlib import Path
+
+        from sidekick.constants import UI_COLORS
+        from sidekick.utils.file_utils import DotDict
+
+        from ..tools.read_file import read_file
+        from ..utils.bm25 import BM25, tokenize
+        from ..utils.text_utils import ext_to_lang
+
+        colors = DotDict(UI_COLORS)
+
+        query = " ".join(args) if args else "overview"
+        await ui.info("Building BM25 index of repository")
+
+        docs: List[str] = []
+        paths: List[Path] = []
+        exts = {".py", ".js", ".ts", ".java", ".c", ".cpp", ".md", ".txt"}
+        for path in Path(".").rglob("*"):
+            if path.is_file() and path.suffix in exts:
+                try:
+                    docs.append(path.read_text(encoding="utf-8"))
+                    paths.append(path)
+                except Exception:
+                    continue
+
+        if not docs:
+            await ui.error("No files found to index")
+            return
+
+        bm25 = BM25(docs)
+        scores = bm25.get_scores(tokenize(query))
+        ranked = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:5]
+
+        for idx in ranked:
+            file_path = paths[idx]
+            content = await read_file(str(file_path))
+            lang = ext_to_lang(str(file_path))
+            await ui.panel(
+                str(file_path),
+                f"```{lang}\n{content}\n```",
+                border_style=colors.muted,
+            )
+
+
 class HelpCommand(SimpleCommand):
     """Show help information."""
 
@@ -350,6 +408,7 @@ class CommandRegistry:
             ClearCommand,
             HelpCommand,
             UndoCommand,
+            TinyAgentCommand,
             CompactCommand,
             ModelCommand,
         ]
