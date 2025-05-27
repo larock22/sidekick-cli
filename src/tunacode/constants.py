@@ -115,7 +115,7 @@ CMD_OUTPUT_TRUNCATED = "\n...\n[truncated]\n...\n"
 
 # Undo system messages
 UNDO_DISABLED_HOME = "Undo system disabled, running from home directory"
-UNDO_DISABLED_NO_GIT = "Undo system disabled, not in a git project"
+UNDO_DISABLED_NO_GIT = "⚠️  Not in a git repository - undo functionality will be limited"
 UNDO_INITIAL_COMMIT = "Initial commit for tunacode undo history"
 UNDO_GIT_TIMEOUT = "Git initialization timed out"
 

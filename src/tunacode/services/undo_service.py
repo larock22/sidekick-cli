@@ -63,7 +63,10 @@ def init_undo_system(state_manager: StateManager) -> bool:
         return False
 
     if not is_in_git_project():
-        ui.warning(UNDO_DISABLED_NO_GIT)
+        # Temporarily use sync print for warnings during init
+        print("⚠️  Not in a git repository - undo functionality will be limited")
+        print("💡 To enable undo functionality, run: git init")
+        print("   File operations will still work, but can't be undone")
         return False
 
     # Get the session directory path

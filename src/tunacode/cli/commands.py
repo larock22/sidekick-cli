@@ -251,7 +251,13 @@ class UndoCommand(SimpleCommand):
         if success:
             await ui.success(message)
         else:
+            # Provide more helpful information when undo fails
             await ui.warning(message)
+            if "not in a git repository" in message.lower():
+                await ui.muted("💡 To enable undo functionality:")
+                await ui.muted("   • Run 'git init' to initialize a git repository")
+                await ui.muted("   • Or work in a directory that's already a git repository")
+                await ui.muted("   • File operations will still work, but can't be undone")
 
 
 
@@ -478,9 +484,15 @@ class CommandRegistry:
         for alias in command.aliases:
             self._commands[alias.lower()] = command
 
-        # Add to category
-        if command not in self._categories[command.category]:
-            self._categories[command.category].append(command)
+        # Add to category (remove existing instance first to prevent duplicates)
+        category_commands = self._categories[command.category]
+        # Remove any existing instance of this command class
+        self._categories[command.category] = [
+            cmd for cmd in category_commands 
+            if cmd.__class__ != command.__class__
+        ]
+        # Add the new instance
+        self._categories[command.category].append(command)
 
     def register_command_class(self, command_class: Type[Command]) -> None:
         """Register a command class using the factory."""
@@ -501,7 +513,7 @@ class CommandRegistry:
             UndoCommand,
             BranchCommand,
             InitCommand,
-            TunaCodeCommand,
+            # TunaCodeCommand,  # TODO: Temporarily disabled
             CompactCommand,
             ModelCommand,
         ]
@@ -518,6 +530,10 @@ class CommandRegistry:
 
     def set_process_request_callback(self, callback: ProcessRequestCallback) -> None:
         """Set the process_request callback for commands that need it."""
+        # Only update if callback has changed
+        if self._factory.dependencies.process_request_callback == callback:
+            return
+            
         self._factory.update_dependencies(process_request_callback=callback)
 
         # Re-register CompactCommand with new dependency if already registered
@@ -548,14 +564,42 @@ class CommandRegistry:
         command_name = parts[0].lower()
         args = parts[1:]
 
-        if command_name not in self._commands:
+        # First try exact match
+        if command_name in self._commands:
+            command = self._commands[command_name]
+            return await command.execute(args, context)
+        
+        # Try partial matching
+        matches = self.find_matching_commands(command_name)
+        
+        if not matches:
             raise ValidationError(f"Unknown command: {command_name}")
+        elif len(matches) == 1:
+            # Unambiguous match
+            command = self._commands[matches[0]]
+            return await command.execute(args, context)
+        else:
+            # Ambiguous - show possibilities
+            raise ValidationError(
+                f"Ambiguous command '{command_name}'. Did you mean: {', '.join(sorted(set(matches)))}?"
+            )
 
-        command = self._commands[command_name]
-        return await command.execute(args, context)
+    def find_matching_commands(self, partial_command: str) -> List[str]:
+        """
+        Find all commands that start with the given partial command.
+        
+        Args:
+            partial_command: The partial command to match
+            
+        Returns:
+            List of matching command names
+        """
+        self.discover_commands()
+        partial = partial_command.lower()
+        return [cmd for cmd in self._commands.keys() if cmd.startswith(partial)]
 
     def is_command(self, text: str) -> bool:
-        """Check if text starts with a registered command."""
+        """Check if text starts with a registered command (supports partial matching)."""
         if not text:
             return False
 
@@ -563,7 +607,14 @@ class CommandRegistry:
         if not parts:
             return False
 
-        return parts[0].lower() in self._commands
+        command_name = parts[0].lower()
+        
+        # Check exact match first
+        if command_name in self._commands:
+            return True
+            
+        # Check partial match
+        return len(self.find_matching_commands(command_name)) > 0
 
     def get_command_names(self) -> CommandArgs:
         """Get all registered command names (including aliases)."""

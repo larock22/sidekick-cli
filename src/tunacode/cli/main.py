@@ -24,7 +24,6 @@ state_manager = StateManager()
 @app.command()
 def main(
     version: bool = typer.Option(False, "--version", "-v", help="Show version and exit."),
-    logfire_enabled: bool = typer.Option(False, "--logfire", help="Enable Logfire tracing."),
     run_setup: bool = typer.Option(False, "--setup", help="Run setup process."),
 ):
     if version:
