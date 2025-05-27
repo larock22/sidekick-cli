@@ -5,7 +5,7 @@ Command execution tool for agent operations in the Sidekick application.
 Provides controlled shell command execution with output capture and truncation.
 """
 
-import subprocess
+import asyncio
 
 from tunacode.constants import (CMD_OUTPUT_FORMAT, CMD_OUTPUT_NO_ERRORS, CMD_OUTPUT_NO_OUTPUT,
                                 CMD_OUTPUT_TRUNCATED, COMMAND_OUTPUT_END_SIZE,
@@ -15,6 +15,7 @@ from tunacode.exceptions import ToolExecutionError
 from tunacode.tools.base import BaseTool
 from tunacode.types import ToolResult
 from tunacode.ui import console as default_ui
+from tunacode.utils.process import CancellableProcess, set_current_process
 
 
 class RunCommandTool(BaseTool):
@@ -37,17 +38,29 @@ class RunCommandTool(BaseTool):
             FileNotFoundError: If command not found
             Exception: Any command execution errors
         """
-        process = subprocess.Popen(
-            command,
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-        )
-        stdout, stderr = process.communicate()
-        output = stdout.strip() or CMD_OUTPUT_NO_OUTPUT
-        error = stderr.strip() or CMD_OUTPUT_NO_ERRORS
-        resp = CMD_OUTPUT_FORMAT.format(output=output, error=error).strip()
+        # Create a cancellable process
+        process = CancellableProcess()
+        set_current_process(process)
+        
+        try:
+            stdout, stderr, returncode = await process.run(command)
+            
+            # Check if cancelled
+            if returncode == -1 and "cancelled" in stderr.lower():
+                if self.ui:
+                    await self.ui.warning("Command cancelled by user")
+                return "Command execution cancelled by user"
+            
+            output = stdout.strip() or CMD_OUTPUT_NO_OUTPUT
+            error = stderr.strip() or CMD_OUTPUT_NO_ERRORS
+            resp = CMD_OUTPUT_FORMAT.format(output=output, error=error).strip()
+        except asyncio.CancelledError:
+            if self.ui:
+                await self.ui.warning("Command cancelled by user")
+            return "Command execution cancelled by user"
+        finally:
+            # Clear the current process
+            set_current_process(None)
 
         # Truncate if the output is too long to prevent issues
         if len(resp) > MAX_COMMAND_OUTPUT:
