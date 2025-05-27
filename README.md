@@ -11,7 +11,7 @@ Your agentic CLI developer.
 
 Sidekick is an agentic CLI-based AI tool inspired by Claude Code, Copilot, Windsurf and Cursor. It's meant
 to be an open source alternative to these tools, providing a similar experience but with the flexibility of
-using different LLM providers (Anthropic, OpenAI, Google Gemini) while keeping the agentic workflow.
+using different LLM providers (Anthropic, OpenAI, Google Gemini, OpenRouter) while keeping the agentic workflow.
 
 *Sidekick is currently in beta and under active development. Please [report issues](https://github.com/geekforbrains/sidekick-cli/issues) or share feedback!*
 
@@ -30,7 +30,7 @@ using different LLM providers (Anthropic, OpenAI, Google Gemini) while keeping t
 ## Roadmap
 
 - Tests 😅
-- More LLM providers, including Ollama
+- More LLM providers, including OpenRouter and Ollama
 
 ## Quick Start
 
@@ -48,8 +48,24 @@ sidekick
 
 ## Configuration
 
-After initial setup, Sidekick saves a config file to `~/.config/sidekick.json`. You can open and 
+After initial setup, Sidekick saves a config file to `~/.config/sidekick.json`. You can open and
 edit this file as needed. Future updates will make editing easier directly from within Sidekick.
+
+### OpenRouter Support
+
+To use [OpenRouter](https://openrouter.ai) models, add an `OPENROUTER_API_KEY` to the
+`env` section of your configuration file. Sidekick will set the environment variable so the
+OpenAI client can communicate with OpenRouter:
+
+```json
+{
+  "env": {
+    "OPENROUTER_API_KEY": "<YOUR_KEY>"
+  }
+}
+```
+Set the environment variable `OPENAI_BASE_URL` to `https://openrouter.ai/api/v1`
+so the OpenAI client sends requests through OpenRouter.
 
 ### MCP Support
 
