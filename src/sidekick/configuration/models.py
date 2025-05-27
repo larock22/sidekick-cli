@@ -51,6 +51,9 @@ class ModelRegistry:
             "openai:o3-mini": ModelConfig(
                 pricing=ModelPricing(input=1.10, cached_input=0.55, output=4.40)
             ),
+            "openrouter:mistralai/devstral-small": ModelConfig(
+                pricing=ModelPricing(input=0.0, cached_input=0.0, output=0.0)
+            ),
         }
 
     def get_model(self, name: ModelName) -> ModelConfig:

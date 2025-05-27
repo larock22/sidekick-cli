@@ -15,6 +15,7 @@ DEFAULT_USER_CONFIG: UserConfig = {
         "ANTHROPIC_API_KEY": "",
         "GEMINI_API_KEY": "",
         "OPENAI_API_KEY": "",
+        "OPENROUTER_API_KEY": "",
     },
     "settings": {
         "max_retries": 10,
