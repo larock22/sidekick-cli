@@ -99,6 +99,7 @@ MCP servers extend the capabilities of your AI assistant, allowing it to interac
 - `/compact` - Summarize message history and clear old messages
 - `/model` - List available models
 - `/model <num>` - Switch to a specific model (by index)
+- `/branch <name>` - Create and switch to a new Git branch
 - `/undo` - Undo most recent changes
 - `/dump` - Show current message history (for debugging)
 - `exit` - Exit the application

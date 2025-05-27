@@ -254,6 +254,52 @@ class UndoCommand(SimpleCommand):
             await ui.warning(message)
 
 
+class BranchCommand(SimpleCommand):
+    """Create and switch to a new git branch."""
+
+    def __init__(self):
+        super().__init__(
+            CommandSpec(
+                name="branch",
+                aliases=["/branch"],
+                description="Create and switch to a new git branch",
+                category=CommandCategory.DEVELOPMENT,
+            )
+        )
+
+    async def execute(self, args: List[str], context: CommandContext) -> None:
+        import subprocess
+
+        from ..services.undo_service import is_in_git_project
+
+        if not args:
+            await ui.error("Usage: /branch <branch-name>")
+            return
+
+        if not is_in_git_project():
+            await ui.error("Not a git repository")
+            return
+
+        branch_name = args[0]
+
+        try:
+            subprocess.run(
+                ["git", "checkout", "-b", branch_name],
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=5,
+            )
+            await ui.success(f"Switched to new branch '{branch_name}'")
+        except subprocess.TimeoutExpired:
+            await ui.error("Git command timed out")
+        except subprocess.CalledProcessError as e:
+            error_msg = e.stderr.strip() if e.stderr else str(e)
+            await ui.error(f"Git error: {error_msg}")
+        except FileNotFoundError:
+            await ui.error("Git executable not found")
+
+
 class CompactCommand(SimpleCommand):
     """Compact conversation context."""
 
@@ -408,6 +454,7 @@ class CommandRegistry:
             ClearCommand,
             HelpCommand,
             UndoCommand,
+            BranchCommand,
             TinyAgentCommand,
             CompactCommand,
             ModelCommand,
