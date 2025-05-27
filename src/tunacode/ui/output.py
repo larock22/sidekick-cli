@@ -50,11 +50,6 @@ async def warning(text: str) -> None:
     await print(f"• {text}", style=colors.warning)
 
 
-async def status(text: str) -> None:
-    """Print a status message."""
-    await print(f"⚡ {text}", style=colors.muted)
-
-
 async def muted(text: str, spaces: int = 0) -> None:
     """Print a muted message."""
     await print(f"{' ' * spaces}• {text}", style=colors.muted)

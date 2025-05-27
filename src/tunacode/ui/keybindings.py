@@ -19,7 +19,6 @@ def create_key_bindings() -> KeyBindings:
         """Insert a newline character."""
         event.current_buffer.insert_text("\n")
     
-    # Add escape followed by enter for newline (as mentioned in placeholder)
     @kb.add("escape", "enter")
     def _escape_enter(event):
         """Insert a newline when escape then enter is pressed."""

@@ -238,7 +238,7 @@ async def repl(state_manager: StateManager):
 
             # Check if another task is already running
             if state_manager.session.current_task and not state_manager.session.current_task.done():
-                await ui.muted("Agent is busy, use /stop to interrupt.")
+                await ui.muted("Agent is busy, press Ctrl+C to interrupt.")
                 continue
 
             state_manager.session.current_task = get_app().create_background_task(
