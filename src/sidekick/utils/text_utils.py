@@ -48,3 +48,40 @@ def ext_to_lang(path: str) -> str:
     if ext in MAP:
         return MAP[ext]
     return "text"
+
+
+def expand_file_refs(text: str) -> str:
+    """Expand @file references with file contents wrapped in code fences.
+
+    Args:
+        text: The input text potentially containing @file references.
+
+    Returns:
+        Text with any @file references replaced by the file's contents.
+
+    Raises:
+        ValueError: If a referenced file does not exist or is too large.
+    """
+    import os
+    import re
+
+    from sidekick.constants import (ERROR_FILE_NOT_FOUND, ERROR_FILE_TOO_LARGE, MAX_FILE_SIZE,
+                                    MSG_FILE_SIZE_LIMIT)
+
+    pattern = re.compile(r"@([\w./_-]+)")
+
+    def replacer(match: re.Match) -> str:
+        path = match.group(1)
+        if not os.path.exists(path):
+            raise ValueError(ERROR_FILE_NOT_FOUND.format(filepath=path))
+
+        if os.path.getsize(path) > MAX_FILE_SIZE:
+            raise ValueError(ERROR_FILE_TOO_LARGE.format(filepath=path) + MSG_FILE_SIZE_LIMIT)
+
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        lang = ext_to_lang(path)
+        return f"```{lang}\n{content}\n```"
+
+    return pattern.sub(replacer, text)

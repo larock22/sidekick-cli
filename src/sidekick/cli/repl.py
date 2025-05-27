@@ -158,6 +158,15 @@ async def process_request(text: str, state_manager: StateManager, output: bool =
         True, state_manager.session.spinner, state_manager
     )
     try:
+        # Expand @file references before sending to the agent
+        try:
+            from sidekick.utils.text_utils import expand_file_refs
+
+            text = expand_file_refs(text)
+        except ValueError as e:
+            await ui.error(str(e))
+            return
+
         # Create a partial function that includes state_manager
         def tool_callback_with_state(part, node):
             return _tool_handler(part, node, state_manager)
