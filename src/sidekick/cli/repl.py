@@ -210,8 +210,9 @@ async def repl(state_manager: StateManager):
     await ui.warning("⚠️  tinyAgent v0.1 - BETA SOFTWARE")
     await ui.muted("→ All changes will be made on a new branch for safety")
     await ui.muted("→ Use with caution! This tool can modify your codebase")
+    await ui.muted(f"→ Model loaded: {state_manager.session.current_model}")
     await ui.line()
-    await ui.success(f"[{state_manager.session.current_model}] ready to hack...")
+    await ui.success("ready to hack...")
     await ui.line()
     
     instance = agent.get_or_create_agent(state_manager.session.current_model, state_manager)

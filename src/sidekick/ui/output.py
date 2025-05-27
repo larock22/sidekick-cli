@@ -16,13 +16,12 @@ from .decorators import create_sync_wrapper
 console = Console()
 colors = DotDict(UI_COLORS)
 
-BANNER = """\
-████████╗██╗███╗   ██╗██╗   ██╗ █████╗  ██████╗ ███████╗███╗   ██╗████████╗
-╚══██╔══╝██║████╗  ██║╚██╗ ██╔╝██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝
-   ██║   ██║██╔██╗ ██║ ╚████╔╝ ███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║   
-   ██║   ██║██║╚██╗██║  ╚██╔╝  ██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║   
-   ██║   ██║██║ ╚████║   ██║   ██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║   
-   ╚═╝   ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝"""
+BANNER = """[bright_green]████████╗██╗███╗   ██╗██╗   ██╗[/bright_green] [dark_red] █████╗  ██████╗ ███████╗███╗   ██╗████████╗[/dark_red]
+[bright_green]╚══██╔══╝██║████╗  ██║╚██╗ ██╔╝[/bright_green][dark_red]██╔══██╗██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝[/dark_red]
+[bright_green]   ██║   ██║██╔██╗ ██║ ╚████╔╝[/bright_green] [dark_red]███████║██║  ███╗█████╗  ██╔██╗ ██║   ██║[/dark_red]   
+[bright_green]   ██║   ██║██║╚██╗██║  ╚██╔╝[/bright_green]  [dark_red]██╔══██║██║   ██║██╔══╝  ██║╚██╗██║   ██║[/dark_red]   
+[bright_green]   ██║   ██║██║ ╚████║   ██║[/bright_green]   [dark_red]██║  ██║╚██████╔╝███████╗██║ ╚████║   ██║[/dark_red]   
+[bright_green]   ╚═╝   ╚═╝╚═╝  ╚═══╝   ╚═╝[/bright_green]   [dark_red]╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝[/dark_red]"""
 
 
 @create_sync_wrapper
@@ -71,8 +70,8 @@ async def banner() -> None:
     """Display the application banner."""
     console.clear()
     banner_padding = Padding(BANNER, (1, 0, 0, 2))
-    # Hacky green banner, no version display
-    await print(banner_padding, style="bright_green")
+    # Two-tone banner: green TINY + red AGENT
+    await print(banner_padding)
 
 
 async def clear() -> None:
