@@ -64,8 +64,17 @@ OpenAI client can communicate with OpenRouter:
   }
 }
 ```
-Set the environment variable `OPENAI_BASE_URL` to `https://openrouter.ai/api/v1`
-so the OpenAI client sends requests through OpenRouter.
+
+Then run Sidekick with the OpenRouter base URL:
+
+```bash
+OPENAI_BASE_URL="https://openrouter.ai/api/v1" sidekick
+```
+
+You can now switch to OpenRouter models using:
+```
+/model openrouter:mistralai/devstral-small
+```
 
 ### MCP Support
 
