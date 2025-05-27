@@ -4,8 +4,8 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List
 
-from tinyagent.utils.system import list_cwd
-from tinyagent.utils.ripgrep import ripgrep
+from tunacode.utils.system import list_cwd
+from tunacode.utils.ripgrep import ripgrep
 
 
 async def get_git_status() -> Dict[str, object]:
