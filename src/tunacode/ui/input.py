@@ -80,6 +80,7 @@ async def multiline_input(state_manager: Optional[StateManager] = None, command_
             "<darkgrey>"
             "<bold>Enter</bold> to submit, "
             "<bold>Esc + Enter</bold> for new line, "
+            "<bold>Esc Esc</bold> to cancel, "
             "<bold>/help</bold> for commands"
             "</darkgrey>"
         )
