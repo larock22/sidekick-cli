@@ -25,9 +25,6 @@ state_manager = StateManager()
 def main(
     version: bool = typer.Option(False, "--version", "-v", help="Show version and exit."),
     logfire_enabled: bool = typer.Option(False, "--logfire", help="Enable Logfire tracing."),
-    no_telemetry: bool = typer.Option(
-        False, "--no-telemetry", help="Disable telemetry collection."
-    ),
     run_setup: bool = typer.Option(False, "--setup", help="Run setup process."),
 ):
     if version:
@@ -39,9 +36,6 @@ def main(
     has_update, latest_version = check_for_updates()
     if has_update:
         asyncio.run(ui.show_update_message(latest_version))
-
-    if no_telemetry:
-        state_manager.session.telemetry_enabled = False
 
     try:
         asyncio.run(setup(run_setup, state_manager))

@@ -150,7 +150,6 @@ class SessionState:
     undo_initialized: bool
     session_id: str
     device_id: Optional[str]
-    telemetry_enabled: bool
     input_sessions: Dict[str, Any]
     current_task: Optional[Any]
 
@@ -184,9 +183,6 @@ class CommandContext:
 MCPServerConfig = Dict[str, Any]
 MCPServers = Dict[str, MCPServerConfig]
 
-# Telemetry types
-TelemetryEvent = Dict[str, Any]
-TelemetryData = Dict[str, Any]
 
 # =============================================================================
 # File Operation Types

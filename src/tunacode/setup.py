@@ -7,8 +7,8 @@ Provides high-level setup functions for initializing the application and its age
 
 from typing import Any, Optional
 
-from tunacode.core.setup import (AgentSetup, ConfigSetup, EnvironmentSetup, SetupCoordinator,
-                                 TelemetrySetup, UndoSetup)
+from tunacode.core.setup import (AgentSetup, ConfigSetup, EnvironmentSetup, GitSafetySetup,
+                                 SetupCoordinator, UndoSetup)
 from tunacode.core.state import StateManager
 
 
@@ -23,9 +23,9 @@ async def setup(run_setup: bool, state_manager: StateManager) -> None:
     coordinator = SetupCoordinator(state_manager)
 
     # Register setup steps in order
-    coordinator.register_step(TelemetrySetup(state_manager))
     coordinator.register_step(ConfigSetup(state_manager))
     coordinator.register_step(EnvironmentSetup(state_manager))
+    coordinator.register_step(GitSafetySetup(state_manager))  # Run after config/env but before undo
     coordinator.register_step(UndoSetup(state_manager))
 
     # Run all setup steps

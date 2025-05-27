@@ -119,15 +119,6 @@ TunaCode supports the use of a "guide". This is a `TUNACODE.md` file in the proj
 instructions for TunaCode. Helpful for specifying tech stack, project structure, development
 preferences etc.
 
-## Telemetry
-
-TunaCode uses [Sentry](https://sentry.io/) for error tracking and usage analytics. You can disable this by
-starting with the `--no-telemetry` flag.
-
-```
-tunacode --no-telemetry
-```
-
 ## Requirements
 
 - Python 3.10 or higher

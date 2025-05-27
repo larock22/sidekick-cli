@@ -27,7 +27,6 @@ class SessionState:
     undo_initialized: bool = False
     session_id: SessionId = field(default_factory=lambda: str(uuid.uuid4()))
     device_id: Optional[DeviceId] = None
-    telemetry_enabled: bool = True
     input_sessions: InputSessions = field(default_factory=dict)
     current_task: Optional[Any] = None
 
