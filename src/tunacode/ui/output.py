@@ -16,12 +16,9 @@ from .decorators import create_sync_wrapper
 console = Console()
 colors = DotDict(UI_COLORS)
 
-BANNER = """[bright_cyan]████████╗██╗   ██╗███╗   ██╗ █████╗  ██████╗ ██████╗ ██████╗ ███████╗[/bright_cyan]
-[bright_cyan]╚══██╔══╝██║   ██║████╗  ██║██╔══██╗██╔════╝██╔═══██╗██╔══██╗██╔════╝[/bright_cyan]
-[bright_cyan]   ██║   ██║   ██║██╔██╗ ██║███████║██║     ██║   ██║██║  ██║█████╗  [/bright_cyan]
-[bright_cyan]   ██║   ██║   ██║██║╚██╗██║██╔══██║██║     ██║   ██║██║  ██║██╔══╝  [/bright_cyan]
-[bright_cyan]   ██║   ╚██████╔╝██║ ╚████║██║  ██║╚██████╗╚██████╔╝██████╔╝███████╗[/bright_cyan]
-[bright_cyan]   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝[/bright_cyan]"""
+BANNER = """[bold #00d7ff]┌─────────────────────────────────────────────────────────────────┐[/bold #00d7ff]
+[bold #00d7ff]│[/bold #00d7ff] [bold white]T U N A C O D E[/bold white] [dim #64748b]• Agentic AI Development Environment[/dim #64748b] [bold #00d7ff]│[/bold #00d7ff]
+[bold #00d7ff]└─────────────────────────────────────────────────────────────────┘[/bold #00d7ff]"""
 
 
 @create_sync_wrapper
@@ -37,22 +34,22 @@ async def line() -> None:
 
 async def info(text: str) -> None:
     """Print an informational message."""
-    await print(f"• {text}", style=colors.primary)
+    await print(f"[{colors.primary}]●[/{colors.primary}] {text}", style=colors.muted)
 
 
 async def success(message: str) -> None:
     """Print a success message."""
-    await print(f"• {message}", style=colors.success)
+    await print(f"[{colors.success}]✓[/{colors.success}] {message}")
 
 
 async def warning(text: str) -> None:
     """Print a warning message."""
-    await print(f"• {text}", style=colors.warning)
+    await print(f"[{colors.warning}]⚠[/{colors.warning}] {text}")
 
 
 async def muted(text: str, spaces: int = 0) -> None:
     """Print a muted message."""
-    await print(f"{' ' * spaces}• {text}", style=colors.muted)
+    await print(f"{' ' * spaces}[{colors.muted}]•[/{colors.muted}] [dim]{text}[/dim]")
 
 
 async def usage(usage: str) -> None:
@@ -69,7 +66,7 @@ async def version() -> None:
 async def banner() -> None:
     """Display the application banner."""
     console.clear()
-    banner_padding = Padding(BANNER, (1, 0, 0, 2))
+    banner_padding = Padding(BANNER, (2, 0, 1, 0))
     await print(banner_padding)
 
 

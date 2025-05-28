@@ -67,20 +67,23 @@ SIDEKICK_HOME_DIR = ".tunacode"
 SESSIONS_SUBDIR = "sessions"
 DEVICE_ID_FILE = "device_id"
 
-# UI colors
+# UI colors - Modern sleek color scheme
 UI_COLORS = {
-    "primary": "medium_purple1",
-    "secondary": "medium_purple3",
-    "success": "green",
-    "warning": "orange1",
-    "error": "red",
-    "muted": "grey62",
-    "file_ref": "#00aaff",
+    "primary": "#00d7ff",      # Bright cyan
+    "secondary": "#64748b",   # Slate gray
+    "accent": "#7c3aed",      # Purple accent
+    "success": "#10b981",     # Emerald green
+    "warning": "#f59e0b",     # Amber
+    "error": "#ef4444",       # Red
+    "muted": "#94a3b8",       # Light slate
+    "file_ref": "#00d7ff",    # Bright cyan
+    "background": "#0f172a",  # Dark slate
+    "border": "#334155",      # Slate border
 }
 
 # UI text and formatting
-UI_PROMPT_PREFIX = "λ "
-UI_THINKING_MESSAGE = "[bold green]Thinking..."
+UI_PROMPT_PREFIX = "❯ "
+UI_THINKING_MESSAGE = "[bold #00d7ff]● Thinking...[/bold #00d7ff]"
 UI_DARKGREY_OPEN = "<darkgrey>"
 UI_DARKGREY_CLOSE = "</darkgrey>"
 UI_BOLD_OPEN = "<bold>"

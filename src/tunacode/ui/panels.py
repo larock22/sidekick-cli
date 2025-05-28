@@ -35,15 +35,22 @@ async def panel(
     border_style: Optional[str] = None,
     **kwargs: Any,
 ) -> None:
-    """Display a rich panel."""
-    border_style = border_style or kwargs.get("style")
-    panel_obj = Panel(Padding(text, 1), title=title, title_align="left", border_style=border_style)
+    """Display a rich panel with modern styling."""
+    border_style = border_style or kwargs.get("style") or colors.border
+    panel_obj = Panel(
+        Padding(text, (0, 1, 0, 1)), 
+        title=f"[bold]{title}[/bold]", 
+        title_align="left", 
+        border_style=border_style,
+        padding=(0, 1)
+    )
     await print(Padding(panel_obj, (top, right, bottom, left)), **kwargs)
 
 
 async def agent(text: str, bottom: int = 1) -> None:
-    """Display an agent panel."""
-    await panel(APP_NAME, Markdown(text), bottom=bottom, border_style=colors.primary)
+    """Display an agent panel with modern styling."""
+    title = f"[bold {colors.primary}]●[/bold {colors.primary}] {APP_NAME}"
+    await panel(title, Markdown(text), bottom=bottom, border_style=colors.primary)
 
 
 async def error(text: str) -> None:
@@ -76,9 +83,9 @@ async def models(state_manager: StateManager = None) -> None:
 
 async def help(command_registry=None) -> None:
     """Display the available commands organized by category."""
-    table = Table(show_header=False, box=None, padding=(0, 2, 0, 0))
-    table.add_column("Command", style="white", justify="right")
-    table.add_column("Description", style="white")
+    table = Table(show_header=False, box=None, padding=(0, 3, 0, 0))
+    table.add_column("Command", style=f"bold {colors.primary}", justify="right", min_width=16)
+    table.add_column("Description", style=colors.muted)
 
     if command_registry:
         # Use the new command registry to display commands by category
